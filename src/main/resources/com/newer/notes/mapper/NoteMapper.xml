@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.newer.notes.mapper.NoteMapper">
+    <select id="findAll" resultType="com.newer.notes.domian.Note">
+        select * from notes
+        <where>
+            <if test="title!=null and title=''">
+                and title like concat('%',concat(#{title},'%'))
+            </if>
+        </where>
+    </select>
+
+    <delete id="delById" parameterType="java.lang.Integer">
+        delete from notes where id=#{id}
+    </delete>
+
+    <insert id="addNote" parameterType="com.newer.notes.domian.Note">
+        insert  into notes(title,content,time) values (#{title},#{content},now())
+    </insert>
+
+    <update id="updNote" parameterType="com.newer.notes.domian.Note">
+        update notes<set>
+        <if test="title!=null">
+            title=#{title},
+        </if>
+        <if test="content!=null">
+            content=#{content},
+        </if>
+        <if test="time!=null">
+            title=now(),
+        </if>
+    </set>
+        where id={id}
+    </update>
+
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.newer.notes.domian.Note">
+        select * from notes where id=#{id}
+    </select>
+</mapper>
